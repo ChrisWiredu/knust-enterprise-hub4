@@ -5,26 +5,28 @@ let currentUser = null;
 let cart = {
     items: [],
     addItem: function(product) {
-        const existingItem = this.items.find(item => item.id === product.id);
+        const id = typeof product.id === 'number' || typeof product.id === 'string' ? product.id : `${product.name}-${product.business_name || product.business}`;
+        const existingItem = this.items.find(item => item.id === id);
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
-            this.items.push({ ...product, quantity: 1 });
+            this.items.push({ ...product, id, quantity: 1 });
         }
         this.updateCart();
         this.showNotification(`${product.name} added to cart`);
     },
     removeItem: function(productId) {
-        this.items = this.items.filter(item => item.id !== productId);
+        this.items = this.items.filter(item => String(item.id) !== String(productId));
         this.updateCart();
     },
     updateQuantity: function(productId, quantity) {
-        const item = this.items.find(item => item.id === productId);
+        const item = this.items.find(item => String(item.id) === String(productId));
         if (item) {
-            if (quantity <= 0) {
+            const q = parseInt(quantity, 10);
+            if (!q || q <= 0) {
                 this.removeItem(productId);
             } else {
-                item.quantity = quantity;
+                item.quantity = q;
             }
         }
         this.updateCart();
@@ -51,28 +53,28 @@ let cart = {
         let total = 0;
         
         this.items.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            const itemTotal = Number(item.price) * Number(item.quantity);
             total += itemTotal;
             
             html += `
                 <div class="cart-item border-bottom pb-3 mb-3">
                     <div class="row align-items-center">
                         <div class="col-md-2">
-                            <img src="${item.image_url || item.image}" alt="${item.name}" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                            <img src="${item.image_url || item.image || 'https://via.placeholder.com/60'}" alt="${item.name}" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
                         </div>
                         <div class="col-md-4">
                             <h6 class="mb-1">${item.name}</h6>
-                            <small class="text-muted">${item.business_name || item.business}</small>
+                            <small class="text-muted">${item.business_name || item.business || ''}</small>
                         </div>
                         <div class="col-md-2 text-center">
                             <input type="number" value="${item.quantity}" min="1" class="form-control form-control-sm" 
-                                   onchange="cart.updateQuantity(${item.id}, this.value)">
+                                   onchange="cart.updateQuantity('${item.id}', this.value)">
                         </div>
                         <div class="col-md-2 text-end">
                             <span class="fw-bold">GHS ${itemTotal.toFixed(2)}</span>
                         </div>
                         <div class="col-md-2 text-end">
-                            <button class="btn btn-sm btn-link text-danger" onclick="cart.removeItem(${item.id})">
+                            <button class="btn btn-sm btn-link text-danger" onclick="cart.removeItem('${item.id}')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
