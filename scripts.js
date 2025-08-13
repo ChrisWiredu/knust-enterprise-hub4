@@ -5,26 +5,28 @@ let currentUser = null;
 let cart = {
     items: [],
     addItem: function(product) {
-        const existingItem = this.items.find(item => item.id === product.id);
+        const id = typeof product.id === 'number' || typeof product.id === 'string' ? product.id : `${product.name}-${product.business_name || product.business}`;
+        const existingItem = this.items.find(item => item.id === id);
         if (existingItem) {
             existingItem.quantity += 1;
         } else {
-            this.items.push({ ...product, quantity: 1 });
+            this.items.push({ ...product, id, quantity: 1 });
         }
         this.updateCart();
         this.showNotification(`${product.name} added to cart`);
     },
     removeItem: function(productId) {
-        this.items = this.items.filter(item => item.id !== productId);
+        this.items = this.items.filter(item => String(item.id) !== String(productId));
         this.updateCart();
     },
     updateQuantity: function(productId, quantity) {
-        const item = this.items.find(item => item.id === productId);
+        const item = this.items.find(item => String(item.id) === String(productId));
         if (item) {
-            if (quantity <= 0) {
+            const q = parseInt(quantity, 10);
+            if (!q || q <= 0) {
                 this.removeItem(productId);
             } else {
-                item.quantity = quantity;
+                item.quantity = q;
             }
         }
         this.updateCart();
@@ -51,28 +53,28 @@ let cart = {
         let total = 0;
         
         this.items.forEach(item => {
-            const itemTotal = item.price * item.quantity;
+            const itemTotal = Number(item.price) * Number(item.quantity);
             total += itemTotal;
             
             html += `
                 <div class="cart-item border-bottom pb-3 mb-3">
                     <div class="row align-items-center">
                         <div class="col-md-2">
-                            <img src="${item.image_url || item.image}" alt="${item.name}" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                            <img src="${item.image_url || item.image || 'https://via.placeholder.com/60'}" alt="${item.name}" class="img-fluid rounded" style="width: 60px; height: 60px; object-fit: cover;">
                         </div>
                         <div class="col-md-4">
                             <h6 class="mb-1">${item.name}</h6>
-                            <small class="text-muted">${item.business_name || item.business}</small>
+                            <small class="text-muted">${item.business_name || item.business || ''}</small>
                         </div>
                         <div class="col-md-2 text-center">
                             <input type="number" value="${item.quantity}" min="1" class="form-control form-control-sm" 
-                                   onchange="cart.updateQuantity(${item.id}, this.value)">
+                                   onchange="cart.updateQuantity('${item.id}', this.value)">
                         </div>
                         <div class="col-md-2 text-end">
                             <span class="fw-bold">GHS ${itemTotal.toFixed(2)}</span>
                         </div>
                         <div class="col-md-2 text-end">
-                            <button class="btn btn-sm btn-link text-danger" onclick="cart.removeItem(${item.id})">
+                            <button class="btn btn-sm btn-link text-danger" onclick="cart.removeItem('${item.id}')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -340,6 +342,9 @@ async function viewBusiness(businessId) {
     const detailSection = document.getElementById('business-detail');
     
     try {
+        // Navigate to detail view early for better UX
+        window.location.hash = 'business-detail';
+        
         // Show loading overlay
         showPageLoading(detailSection, 'Loading business details...');
         
@@ -369,16 +374,42 @@ function showBusinessDetail(business) {
 
 // Update business detail content
 function updateBusinessDetailContent(business) {
-    // Update business info
-    document.querySelector('#business-detail .card-title').textContent = business.name;
-    document.querySelector('#business-detail .badge').textContent = business.category;
-    document.querySelector('#business-detail .card-text').textContent = business.description;
-    
+    // Update primary info
+    const titleEl = document.querySelector('#business-detail .card-title');
+    const badgeEl = document.querySelector('#business-detail .badge');
+    const descEl = document.querySelector('#business-detail .card-text');
+    const imgEl = document.querySelector('#business-detail .card img');
+
+    if (titleEl) titleEl.textContent = business.name || '';
+    if (badgeEl) badgeEl.textContent = business.category || '';
+    if (descEl) descEl.textContent = business.description || '';
+    if (imgEl) imgEl.src = business.logo_url || imgEl.src;
+
+    // Social/contact links
+    const waLink = document.querySelector('#business-detail a[href^="https://wa.me/"]');
+    const igLink = document.querySelector('#business-detail a[href*="instagram.com"]');
+    const callLink = document.querySelector('#business-detail a[href^="tel:"]');
+    if (waLink && business.whatsapp_link) waLink.href = `https://wa.me/${business.whatsapp_link.replace(/[^0-9]/g,'')}`;
+    if (igLink && business.instagram_handle) igLink.href = `https://instagram.com/${business.instagram_handle.replace(/^@/, '')}`;
+    if (callLink && business.contact_number) callLink.href = `tel:+${business.contact_number.replace(/[^0-9]/g,'')}`;
+
+    // Location/date
+    const locationEl = Array.from(document.querySelectorAll('#business-detail .fa-map-marker-alt'))[0]?.parentElement;
+    if (locationEl && business.location) {
+        locationEl.lastChild && (locationEl.lastChild.textContent = ` ${business.location}`);
+    }
+
+    const dateEl = Array.from(document.querySelectorAll('#business-detail .text-muted.small')).find(e => e.textContent.includes('Registered on'));
+    if (dateEl && business.created_at) {
+        const dateStr = new Date(business.created_at).toLocaleDateString();
+        dateEl.textContent = `Registered on ${dateStr}`;
+    }
+
     // Update products
     if (business.products && business.products.length > 0) {
         renderBusinessProducts(business.products);
     }
-    
+
     // Update reviews
     if (business.reviews && business.reviews.length > 0) {
         renderBusinessReviews(business.reviews);

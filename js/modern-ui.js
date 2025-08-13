@@ -45,41 +45,41 @@ function filterByCategory(category) {
 // Enhanced business filtering
 function filterBusinesses(searchTerm = '', category = '') {
     const businessGrid = document.getElementById('businessGrid');
-    const allBusinessCards = businessGrid.children;
     
     // Show skeleton loading
     showSkeletonCards(businessGrid, 6);
-    
-    setTimeout(() => {
-        // Get current businesses (this would normally come from API)
-        const businesses = getStaticBusinesses();
-        
-        let filteredBusinesses = businesses;
-        
-        // Apply search filter
-        if (searchTerm.trim()) {
-            filteredBusinesses = filteredBusinesses.filter(business =>
-                business.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                business.description.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
-        
-        // Apply category filter
-        if (category) {
-            filteredBusinesses = filteredBusinesses.filter(business =>
-                business.category === category
-            );
-        }
-        
-        // Render filtered results
-        renderBusinesses(filteredBusinesses);
-        
-        // Update business count in hero
-        const businessCount = document.getElementById('businessCount');
-        if (businessCount) {
-            businessCount.textContent = `${filteredBusinesses.length}+`;
-        }
-    }, 800);
+
+    // Try API first
+    const params = new URLSearchParams();
+    if (searchTerm && searchTerm.trim()) params.set('search', searchTerm.trim());
+    if (category && category.trim()) params.set('category', category.trim());
+
+    APIWithErrorHandling.get(`/businesses${params.toString() ? `?${params.toString()}` : ''}`, { context: 'Filtering Businesses' })
+        .then((result) => {
+            const businesses = result.businesses || result; // support controller-like or simple list
+            renderBusinesses(Array.isArray(businesses) ? businesses : []);
+            const businessCount = document.getElementById('businessCount');
+            if (businessCount) businessCount.textContent = `${Array.isArray(businesses) ? businesses.length : 0}+`;
+        })
+        .catch(() => {
+            // Fallback to static data
+            setTimeout(() => {
+                const businesses = getStaticBusinesses();
+                let filtered = businesses;
+                if (searchTerm.trim()) {
+                    filtered = filtered.filter(b =>
+                        b.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        b.description.toLowerCase().includes(searchTerm.toLowerCase())
+                    );
+                }
+                if (category) {
+                    filtered = filtered.filter(b => b.category === category);
+                }
+                renderBusinesses(filtered);
+                const businessCount = document.getElementById('businessCount');
+                if (businessCount) businessCount.textContent = `${filtered.length}+`;
+            }, 500);
+        });
 }
 
 // Enhanced business card rendering

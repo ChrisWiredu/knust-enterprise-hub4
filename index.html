@@ -806,6 +806,9 @@
     
     <!-- Navigation Functions -->
     <script src="js/navigation.js"></script>
+   
+   <!-- Core App Scripts (cart, API, rendering) -->
+   <script src="scripts.js"></script>
     
     <!-- Additional Scripts -->
     <script>
@@ -920,89 +923,26 @@
             }
         });
 
-        // Shopping Cart Functionality
-        const cart = {
-            items: [],
-            addItem: function(product) {
-                this.items.push(product);
-                this.updateCart();
-                this.showNotification(product.name);
-            },
-            updateCart: function() {
-                document.querySelector('.cart-count').textContent = this.items.length;
-                this.renderCartItems();
-            },
-            renderCartItems: function() {
-                const cartItemsEl = document.querySelector('.cart-items');
-                
-                if (this.items.length === 0) {
-                    cartItemsEl.innerHTML = `
-                        <div class="text-center py-4">
-                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
-                            <p>Your cart is empty</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = '';
-                this.items.forEach(item => {
-                    html += `
-                        <div class="cart-item">
-                            <div class="row align-items-center">
-                                <div class="col-md-2">
-                                    <img src="${item.image}" alt="${item.name}" class="img-fluid rounded">
-                                </div>
-                                <div class="col-md-6">
-                                    <h6>${item.name}</h6>
-                                    <small class="text-muted">${item.business}</small>
-                                </div>
-                                <div class="col-md-2 text-center">
-                                    <input type="number" value="1" min="1" class="form-control form-control-sm">
-                                </div>
-                                <div class="col-md-2 text-end">
-                                    <span class="fw-bold">GHS ${item.price}</span>
-                                    <button class="btn btn-sm btn-link text-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                cartItemsEl.innerHTML = html;
-            },
-            showNotification: function(productName) {
-                const notification = document.createElement('div');
-                notification.className = 'position-fixed bottom-0 end-0 m-3 alert alert-success alert-dismissible fade show';
-                notification.style.zIndex = '1100';
-                notification.innerHTML = `
-                    <i class="fas fa-check-circle me-2"></i>
-                    ${productName} added to cart
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => notification.remove(), 150);
-                }, 3000);
-            }
-        };
-
-        // Add to cart buttons
+        // Shopping Cart Functionality (delegates to global cart in scripts.js)
+        // Add to cart buttons (handles clicks on button or child icon)
         document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('add-to-cart')) {
-                const product = {
-                    name: e.target.dataset.name,
-                    price: e.target.dataset.price,
-                    image: e.target.dataset.image,
-                    business: e.target.dataset.business
-                };
+            const button = e.target.closest('.add-to-cart');
+            if (!button) return;
+            // Only handle dataset-driven buttons to avoid double-adding with inline onclick handlers
+            if (!button.dataset || !button.dataset.name) return;
+            const product = {
+                id: button.dataset.id ? Number(button.dataset.id) : Date.now(),
+                name: button.dataset.name,
+                price: parseFloat(button.dataset.price || '0'),
+                image: button.dataset.image || '',
+                image_url: button.dataset.image || '',
+                business: button.dataset.business || '',
+                business_name: button.dataset.business || ''
+            };
+            if (typeof cart !== 'undefined' && typeof cart.addItem === 'function') {
                 cart.addItem(product);
             }
-        });222
+        });
 
         // Navigation between sections
         function showSection() {

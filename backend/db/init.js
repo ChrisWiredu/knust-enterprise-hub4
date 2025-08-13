@@ -188,7 +188,10 @@ async function initializeDatabase() {
       INSERT INTO users (username, email, password_hash, first_name, last_name, index_number, hall_of_residence, department, phone_number) VALUES
       ('kwame123', 'kwame@knust.edu.gh', 'hashed_password', 'Kwame', 'Mensah', '123456789', 'Unity Hall', 'Computer Science', '233257270471'),
       ('ama_serwaa', 'ama@knust.edu.gh', 'hashed_password', 'Ama', 'Serwaa', '987654321', 'Africa Hall', 'Business Administration', '233244556677'),
-      ('kwesi_manu', 'kwesi@knust.edu.gh', 'hashed_password', 'Kwesi', 'Manu', '456789123', 'Independence Hall', 'Engineering', '233255667788')
+      ('kwesi_manu', 'kwesi@knust.edu.gh', 'hashed_password', 'Kwesi', 'Manu', '456789123', 'Independence Hall', 'Engineering', '233255667788'),
+      ('nana_yaa', 'nana@knust.edu.gh', 'hashed_password', 'Nana', 'Yaa', '112233445', 'Queens Hall', 'Architecture', '233201234567'),
+      ('efua_adom', 'efua@knust.edu.gh', 'hashed_password', 'Efua', 'Adom', '998877665', 'Republic Hall', 'Pharmacy', '233209876543'),
+      ('yaw_owusu', 'yaw@knust.edu.gh', 'hashed_password', 'Yaw', 'Owusu', '776655443', 'Katanga Hall', 'Mathematics', '233218765432')
       ON CONFLICT (username) DO NOTHING;
     `);
 
@@ -196,7 +199,10 @@ async function initializeDatabase() {
       INSERT INTO businesses (name, description, category, location, contact_number, whatsapp_link, instagram_handle, owner_id) VALUES
       ('Los Barbados', 'Delicious homemade meals delivered to your hostel at affordable prices.', 'Food & Drinks', 'Unity Hall', '233123456789', '233123456789', 'losbarbados_knust', 1),
       ('Ayeduase Tech Solutions', 'Laptop repairs, phone screen replacements, and software installations.', 'Electronics', 'CCB', '233234567890', '233234567890', 'ayeduase_tech', 2),
-      ('Kwaku''s Thrift Collections', 'Trendy clothes and accessories for students at student-friendly prices.', 'Fashion', 'Africa Hall', '233345678901', '233345678901', 'kwaku_thrift', 3)
+      ('Kwaku''s Thrift Collections', 'Trendy clothes and accessories for students at student-friendly prices.', 'Fashion', 'Africa Hall', '233345678901', '233345678901', 'kwaku_thrift', 3),
+      ('Campus Hair Studio', 'Professional hairstyling and braiding services for students.', 'Services', 'Independence Hall', '233222333444', '233222333444', 'campus_hair', 4),
+      ('Campus Book Hub', 'Academic books, stationery and printing services for students.', 'Books & Stationery', 'CCB', '233333444555', '233333444555', 'campus_book_hub', 5),
+      ('FitLife Wellness', 'Affordable fitness coaching and wellness products for students.', 'Health & Wellness', 'Brunei', '233444555666', '233444555666', 'fitlife_wellness', 6)
       ON CONFLICT DO NOTHING;
     `);
 
@@ -207,7 +213,13 @@ async function initializeDatabase() {
       ('Laptop Screen Replacement', 'Professional laptop screen replacement service', 150.00, 2, 'Electronics', 10),
       ('Phone Screen Repair', 'Quick and reliable phone screen repair', 80.00, 2, 'Electronics', 15),
       ('Vintage Denim Jacket', 'Stylish vintage denim jacket in excellent condition', 45.00, 3, 'Fashion', 5),
-      ('Designer Sneakers', 'Authentic designer sneakers at affordable prices', 120.00, 3, 'Fashion', 8)
+      ('Designer Sneakers', 'Authentic designer sneakers at affordable prices', 120.00, 3, 'Fashion', 8),
+      ('Knotless Braids', 'Trendy knotless braids with premium extensions included', 200.00, 4, 'Services', 10),
+      ('Acrylic Nails', 'Elegant acrylic nail set with custom designs', 120.00, 4, 'Services', 12),
+      ('Graph Paper Pack', 'Pack of 5 A4 graph paper pads', 25.00, 5, 'Books & Stationery', 40),
+      ('Scientific Calculator', 'Durable scientific calculator for engineering students', 180.00, 5, 'Books & Stationery', 25),
+      ('Yoga Mat', 'Non-slip yoga mat suitable for daily workouts', 95.00, 6, 'Health & Wellness', 20),
+      ('Protein Shaker Bottle', 'Leak-proof shaker bottle for protein shakes', 35.00, 6, 'Health & Wellness', 60)
       ON CONFLICT DO NOTHING;
     `);
 
@@ -218,7 +230,10 @@ async function initializeDatabase() {
       (1, 2, 5, 'Excellent service! Fixed my laptop screen in just 2 hours.'),
       (3, 2, 4, 'Good quality repairs, reasonable prices.'),
       (1, 3, 5, 'Amazing collection! Found exactly what I was looking for.'),
-      (2, 3, 4, 'Great prices and quality items.')
+      (2, 3, 4, 'Great prices and quality items.'),
+      (1, 4, 5, 'Loved my new hairstyle! Friendly service.'),
+      (2, 5, 5, 'Got all my stationery in one place. Highly recommend!'),
+      (3, 6, 4, 'Great coaching sessions and products.')
       ON CONFLICT DO NOTHING;
     `);
 
