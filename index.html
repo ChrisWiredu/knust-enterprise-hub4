@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KNUST Student Enterprise Hub</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/modern.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="#business-list">
+                <img src="img2/knust.PNG" alt="knust logo">   
+                <img src="img2/kselogo.png" alt="kselogo" class="logo">
+            
+               <div class="headertext"> KNUST Student Enterprise Hub </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#business-list">Browse</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#register-business" onclick="showRegisterBusinessModal(event)">Register Business</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#categories" onclick="scrollToCategories(event)">Categories</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <!-- Welcome / Sign in Register -->
+                    <li class="nav-item dropdown me-3">
+                        <a href="#" class="nav-auth-item dropdown-toggle" id="authNavLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            <div>
+                                <small class="d-block text-muted" style="font-size: 0.75rem; line-height: 1;">Welcome</small>
+                                <span id="authNavText">Sign in / Register</span>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" id="authDropdownMenu" aria-labelledby="authNavLink">
+                            <li><a class="dropdown-item" href="#" id="loginLink"><i class="fas fa-sign-in-alt me-2"></i> Login</a></li>
+                            <li><a class="dropdown-item" href="#" id="registerLink"><i class="fas fa-user-plus me-2"></i> Register</a></li>
+                        </ul>
+                    </li>
+                    
+                    <!-- Cart -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-cart-item" data-bs-toggle="modal" data-bs-target="#cartModal">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span>Cart</span>
+                            <span class="cart-count">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Business List Page -->
+    <main id="business-list">
+        <!-- Hero Section -->
+        <section class="hero-section text-center">
+            <div class="container">
+                <h1 class="display-3 fw-bold slide-in-left">KNUST Student Enterprise Hub</h1>
+                <p class="lead slide-in-right">Discover amazing products and services from your fellow KNUST students</p>
+                
+                <!-- Modern Search Section -->
+                <div class="search-box fade-in">
+                    <i class="fas fa-search text-muted"></i>
+                    <input type="text" id="globalSearch" placeholder="Search for businesses, products, or services..." 
+                           class="flex-fill">
+                    <select id="categoryFilter" class="form-select" style="max-width: 200px;">
+                                <option value="">All Categories</option>
+                        <option value="Food & Drinks">🍕 Food & Drinks</option>
+                        <option value="Fashion">👕 Fashion</option>
+                        <option value="Electronics">💻 Electronics</option>
+                        <option value="Services">🛠️ Services</option>
+                        <option value="Books & Stationery">📚 Books</option>
+                        <option value="Health & Wellness">💪 Health</option>
+                            </select>
+                    <button type="button" class="btn btn-primary" onclick="performSearch()">
+                        <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                
+                <!-- Quick Stats -->
+                <div class="row mt-5 fade-in">
+                    <div class="col-md-3 col-6">
+                        <div class="text-white-50">
+                            <div class="h2 fw-bold" id="businessCount">500+</div>
+                            <div>Student Businesses</div>
+                    </div>
+            </div>
+                    <div class="col-md-3 col-6">
+                        <div class="text-white-50">
+                            <div class="h2 fw-bold">1000+</div>
+                            <div>Products & Services</div>
+        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="text-white-50">
+                            <div class="h2 fw-bold">5000+</div>
+                            <div>Happy Students</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <div class="text-white-50">
+                            <div class="h2 fw-bold">24/7</div>
+                            <div>Support Available</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="container my-5">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="text-center mb-4 fade-in">Popular Categories</h2>
+                    <div class="row g-3">
+                        <div class="col-lg-2 col-md-4 col-6 fade-in">
+                            <div class="card text-center hover-lift category-card" onclick="filterByCategory('Food & Drinks')">
+                                <div class="card-body p-3">
+                                    <i class="fas fa-utensils fa-2x text-primary mb-2"></i>
+                                    <h6 class="card-title mb-0">Food & Drinks</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 fade-in">
+                            <div class="card text-center hover-lift category-card" onclick="filterByCategory('Fashion')">
+                                <div class="card-body p-3">
+                                    <i class="fas fa-tshirt fa-2x text-primary mb-2"></i>
+                                    <h6 class="card-title mb-0">Fashion</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 fade-in">
+                            <div class="card text-center hover-lift category-card" onclick="filterByCategory('Electronics')">
+                                <div class="card-body p-3">
+                                    <i class="fas fa-laptop fa-2x text-primary mb-2"></i>
+                                    <h6 class="card-title mb-0">Electronics</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 fade-in">
+                            <div class="card text-center hover-lift category-card" onclick="filterByCategory('Services')">
+                                <div class="card-body p-3">
+                                    <i class="fas fa-tools fa-2x text-primary mb-2"></i>
+                                    <h6 class="card-title mb-0">Services</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 fade-in">
+                            <div class="card text-center hover-lift category-card" onclick="filterByCategory('Books & Stationery')">
+                                <div class="card-body p-3">
+                                    <i class="fas fa-book fa-2x text-primary mb-2"></i>
+                                    <h6 class="card-title mb-0">Books</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-4 col-6 fade-in">
+                            <div class="card text-center hover-lift category-card" onclick="filterByCategory('Health & Wellness')">
+                                <div class="card-body p-3">
+                                    <i class="fas fa-heartbeat fa-2x text-primary mb-2"></i>
+                                    <h6 class="card-title mb-0">Health</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Businesses Section -->
+        <section class="container my-5">
+            <div class="d-flex justify-content-between align-items-center mb-5">
+                <div>
+                    <h2 class="mb-1">Featured Businesses</h2>
+                    <p class="text-muted">Discover top-rated student enterprises on campus</p>
+                </div>
+                <a href="#register-business" class="btn btn-primary hover-glow">
+                    <i class="fas fa-plus me-2"></i> Register Your Business
+            </a>
+        </div>
+
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4" id="businessGrid">
+            <!-- Business Card 1 -->
+            <div class="col">
+                <div class="card h-100 fade-in">
+                    <img src="img2/losb.jpg" class="card-img-top business-card-img" alt="Los Barbados">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Los Barbados</h5>
+                            <span class="badge category-badge">Food & Drinks</span>
+                        </div>
+                        <p class="card-text text-muted small">Delicious homemade meals delivered to your hostel at affordable prices.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="rating-star">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    (24)
+                                </span>
+                            </div>
+                            <span class="text-muted small">
+                                <i class="fas fa-map-marker-alt"></i> Unity Hall
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="#business-detail" class="btn btn-sm btn-outline-primary w-100">
+                            View Business
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Business Card 2 -->
+            <div class="col">
+                <div class="card h-100 fade-in">
+                    <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f" class="card-img-top business-card-img" alt="Tech Solutions">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Ayeduase Tech Solutions</h5>
+                            <span class="badge category-badge">Electronics</span>
+                        </div>
+                        <p class="card-text text-muted small">Laptop repairs, phone screen replacements, and software installations.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="rating-star">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    (37)
+                                </span>
+                            </div>
+                            <span class="text-muted small">
+                                <i class="fas fa-map-marker-alt"></i> CCB
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="#business-detail" class="btn btn-sm btn-outline-primary w-100">
+                            View Business
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+         <!-- Business Card 3 -->
+            <div class="col">
+                <div class="card h-100 fade-in">
+                    <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f" class="card-img-top business-card-img" alt="Fashion Hub">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h5 class="card-title mb-0">Kwaku's Thrift Collections</h5>
+                            <span class="badge category-badge">Fashion</span>
+                        </div>
+                        <p class="card-text text-muted small">Trendy clothes and accessories for students at student-friendly prices.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="rating-star">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    (15)
+                                </span>
+                            </div>
+                            <span class="text-muted small">
+                                <i class="fas fa-map-marker-alt"></i> Africa Hall
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <a href="#business-detail" class="btn btn-sm btn-outline-primary w-100">
+                            View Business
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>    </main>
+
+    <!-- Business Detail Page -->
+    <main class="container my-4" id="business-detail" style="display: none;">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5" class="img-fluid rounded-start h-100" alt="Campus Eats">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h2 class="card-title">Campus Eats</h2>
+                                        <p class="card-text">
+                                            <small class="text-muted">
+                                                Owned by kwame123
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <span class="badge category-badge">Food & Drinks</span>
+                                </div>
+                                
+                                <p class="card-text mt-3">We provide delicious homemade meals at affordable prices, delivered right to your hostel. Our menu changes daily and we cater to various dietary needs.</p>
+                                
+                                <div class="d-flex flex-wrap gap-2 mt-3">
+                                    <a href="https://wa.me/233123456789" class="btn btn-success btn-sm">
+                                        <i class="fab fa-whatsapp"></i> WhatsApp
+                                    </a>
+                                    
+                                    <a href="https://instagram.com/campuseats_knust" 
+                                       class="btn btn-danger btn-sm" target="_blank">
+                                        <i class="fab fa-instagram"></i> Instagram
+                                    </a>
+                                    
+                                    <a href="tel:+233123456789" class="btn btn-primary btn-sm">
+                                        <i class="fas fa-phone"></i> Call
+                                    </a>
+                                </div>
+                                
+                                <div class="mt-3">
+                                    <p class="mb-1"><i class="fas fa-map-marker-alt"></i> Mango Road</p>
+                                    <p class="mb-0 text-muted small">
+                                        Registered on January 15, 2025
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Products</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c" class="card-img-top" alt="Jollof Rice" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Jollof Rice with Chicken</h6>
+                                        <p class="card-text text-muted small">Delicious Ghanaian jollof rice with fried chicken and salad</p> 
+                                        <p class="card-text fw-bold">GHS 25.00</p>
+                                        <span class="badge bg-success">
+                                            Available
+                                        </span>
+                                        <button class="btn btn-sm btn-primary mt-2 w-100 add-to-cart" 
+                                                data-name="Jollof Rice with Chicken" 
+                                                data-price="25.00" 
+                                                data-image="https://images.unsplash.com/photo-1546069901-ba9599a7e63c"
+                                                data-business="Campus Eats">
+                                            <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="card h-100">
+                                    <img src="https://images.unsplash.com/photo-1565557623262-b51c2513a641" class="card-img-top" alt="Banku with Tilapia" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">Banku with Tilapia</h6>
+                                        <p class="card-text text-muted small">Traditional banku with grilled tilapia and pepper sauce</p>
+                                        <p class="card-text fw-bold">GHS 30.00</p>
+                                        <span class="badge bg-success">
+                                            Available
+                                        </span>
+                                        <button class="btn btn-sm btn-primary mt-2 w-100 add-to-cart" 
+                                                data-name="Banku with Tilapia" 
+                                                data-price="30.00" 
+                                                data-image="https://images.unsplash.com/photo-1565557623262-b51c2513a641"
+                                                data-business="Campus Eats">
+                                            <i class="fas fa-cart-plus me-1"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Reviews</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-3">
+                            <h2 class="display-4 fw-bold">4.2</h2>
+                            <div class="rating-star mb-2">
+                                <i class="fas fa-star fa-2x"></i>
+                                <i class="fas fa-star fa-2x"></i>
+                                <i class="fas fa-star fa-2x"></i>
+                                <i class="fas fa-star fa-2x"></i>
+                                <i class="far fa-star fa-2x"></i>
+                            </div>
+                            <p class="text-muted">24 reviews</p>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h6>Write a Review</h6>
+                            <form method="post">
+                                <div class="mb-3">
+                                    <select name="rating" class="form-select" required>
+                                        <option value="" disabled selected>Select rating</option>
+                                        <option value="5">5 - Excellent</option>
+                                        <option value="4">4 - Very Good</option>
+                                        <option value="3">3 - Good</option>
+                                        <option value="2">2 - Poor</option>
+                                        <option value="1">1 - Very Poor</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <textarea name="comment" class="form-control" rows="3" 
+                                              placeholder="Share your experience..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Submit Review</button>
+                            </form>
+                        </div>
+                        
+                        <div class="reviews-list">
+                            <h6>Customer Reviews</h6>
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>ama_serwaa</strong>
+                                    <small class="text-muted">Feb 15, 2023</small>
+                                </div>
+                                <div class="rating-star mb-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="mb-0">The best jollof on campus! Always delivered hot and fresh.</p>
+                            </div>
+                            <div class="border-bottom pb-3 mb-3">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>kwesi_manu</strong>
+                                    <small class="text-muted">Jan 30, 2025</small>
+                                </div>
+                                <div class="rating-star mb-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <p class="mb-0">Great food, but sometimes delivery takes longer than expected.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="#business-list" class="btn btn-secondary mb-4">Back to Businesses</a>
+    </main>
+
+    <!-- Business Registration Page -->
+    <main class="container my-4" id="register-business" style="display: none;">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <a href="#business-list" class="btn btn-secondary" onclick="goBackToHome(event)">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white border-0">
+                        <h3 class="mb-0 text-center">Register Your Business</h3>
+                        <p class="text-center text-muted">Fill out this form to list your business on KNUST Enterprice Hub</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="businessRegistrationForm">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="businessName" class="form-label">Business Name *</label>
+                                        <input type="text" class="form-control" id="businessName" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="businessCategory" class="form-label">Category *</label>
+                                        <select class="form-select" id="businessCategory" required>
+                                            <option value="">Select category</option>
+                                            <option value="food">Food & Drinks</option>
+                                            <option value="fashion">Fashion</option>
+                                            <option value="electronics">Electronics</option>
+                                            <option value="services">Services</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="businessDescription" class="form-label">Description *</label>
+                                <textarea class="form-control" id="businessDescription" rows="3" required></textarea>
+                                <div class="form-text">Tell customers what makes your business unique</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="businessLogo" class="form-label">Business Logo *</label>
+                                <input type="file" class="form-control" id="businessLogo" accept="image/*" required>
+                                <div class="form-text">Recommended size: 500x500 pixels</div>
+                                <div class="mt-2 text-center" id="logoPreviewContainer" style="display: none;">
+                                    <img id="logoPreview" class="img-thumbnail rounded-lg" style="max-height: 150px;">
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="contactNumber" class="form-label">Contact Number *</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">+233</span>
+                                            <input type="tel" class="form-control" id="contactNumber" pattern="[0-9]{9}" required>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">Location on Campus *</label>
+                                        <select class="form-select" id="location" required>
+                                            <option value="">Select location</option>
+                                            <option value="unity">Unity Hall</option>
+                                            <option value="africa">Africa Hall</option>
+                                            <option value="independence">Independence Hall</option>
+                                            <option value="queens">Queen's Hall</option>
+                                            <option value="katanga">Katanga Hall</option>
+                                            <option value="republic">Republic Hall</option>
+                                            <option value="ayeduase">Ayeduase</option>
+                                            <option value="kotei">Kotei</option>
+                                            <option value="hall 6">Hall 6</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="whatsapp" class="form-label">WhatsApp Link</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">wa.me/</span>
+                                            <input type="text" class="form-control" id="whatsapp">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="instagram" class="form-label">Instagram Handle</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">@</span>
+                                            <input type="text" class="form-control" id="instagram">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="termsAgreement" required>
+                                    <label class="form-check-label" for="termsAgreement">
+                                        I agree to the <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-check-circle me-2"></i> Register Business
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary">
+                                    Clear Form
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Your Shopping Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="cart-items">
+                        <!-- Cart items will appear here -->
+                        <div class="text-center py-4">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <p>Your cart is empty</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Continue Shopping</button>
+                    <button type="button" class="btn btn-primary">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">User Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <div class="mb-3">
+                                <img src="https://via.placeholder.com/150" class="rounded-circle img-thumbnail" alt="Profile Picture">
+                            </div>
+                            <button class="btn btn-sm btn-outline-primary mb-4">Change Photo</button>
+                            <div class="card shadow-sm">
+                                <div class="card-body">
+                                    <h6 class="card-title">Account Status</h6>
+                                    <span class="badge bg-success">Verified</span>
+                                    <p class="small mt-2">Member since: Jan 2025</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <form>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">First Name</label>
+                                            <input type="text" class="form-control" placeholder="Chris">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" placeholder="Elliot">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" placeholder="cwiredu123@knust.edu.gh">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Index Number</label>
+                                    <input type="text" class="form-control" placeholder="8571321">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Hall of Residence/ Hostel</label>
+                                    <select class="form-select">
+                                        <option>Unity Hall</option>
+                                        <option>Africa Hall</option>
+                                        <option>Independence Hall</option>
+                                        <option>Republic Hall</option>
+                                        <option>Katanga Hall</option>
+                                        <option>Kotei</option>
+                                        <option>Ayeduase</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Department</label>
+                                    <input type="text" class="form-control" placeholder="Computer Science">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">+233</span>
+                                        <input type="tel" class="form-control" placeholder="25-727-0471">
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Logout</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-sign-out-alt fa-3x text-primary mb-3"></i>
+                    <h5>Are you sure you want to logout?</h5>
+                    <p>You'll need to sign in again to access your account</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary">Yes, Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-knust py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h5>KNUST Student EntHub</h5>
+                    <p>A platform for KNUST students to buy and sell products/services within the campus community.</p>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#business-list">Browse Businesses</a></li>
+                        <li class="mb-2"><a href="#register-business">Register Business</a></li>
+                        <li class="mb-2"><a href="#categories">Categories</a></li>
+                        <li class="mb-2"><a href="#about">About Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Support</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="#faq">FAQs</a></li>
+                        <li class="mb-2"><a href="#contact">Contact Us</a></li>
+                        <li class="mb-2"><a href="#terms">Terms of Service</a></li>
+                        <li class="mb-2"><a href="#privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h5>Contact Info</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> KNUST Campus, Kumasi</li>
+                        <li class="mb-2"><i class="fas fa-phone me-2"></i> +233 257 270 471</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2"></i> info@knustenterprise.com</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 bg-light">
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start">
+                    <p class="mb-0">&copy; 2025 KNUST Student Enterprise Hub. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p class="mb-0">Designed with love for KNUST Students</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Validation JavaScript -->
+    <script src="js/validation.js"></script>
+    
+    <!-- Loading States JavaScript -->
+    <script src="js/loading.js"></script>
+    
+    <!-- Error Handling JavaScript -->
+    <script src="js/error-handler.js"></script>
+    
+    <!-- Authentication JavaScript -->
+    <script src="js/auth.js"></script>
+    
+    <!-- Modern UI JavaScript -->
+    <script src="js/modern-ui.js"></script>
+    
+    <!-- Navigation Functions -->
+    <script src="js/navigation.js"></script>
+    
+    <!-- Additional Scripts -->
+    <script>
+        // Functions are now loaded from navigation.js
+        
+        // Fix Browse link as well
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle Browse link
+            const browseLink = document.querySelector('a[href="#business-list"]');
+            if (browseLink) {
+                browseLink.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    
+                    const businessList = document.querySelector('#business-list, .business-list, [class*="business"]');
+                    if (businessList) {
+                        businessList.scrollIntoView({ 
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    } else {
+                        // Scroll to top of page if business list not found
+                        window.scrollTo({ 
+                            top: 0, 
+                            behavior: 'smooth' 
+                        });
+                    }
+                });
+            }
+        });
+    </script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Business Registration Form Validation
+        document.getElementById('businessRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Collect form data
+            const formData = {
+                businessName: document.getElementById('businessName').value,
+                description: document.getElementById('businessDescription').value,
+                category: document.getElementById('businessCategory').value,
+                location: document.getElementById('location').value,
+                contactNumber: document.getElementById('contactNumber').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                instagram: document.getElementById('instagram').value,
+                logoFile: document.getElementById('businessLogo').files[0]
+            };
+            
+            // Validate form
+            const validator = validateBusinessForm(formData);
+            const submitButton = document.querySelector('#businessRegistrationForm button[type="submit"]');
+            
+            if (validator.isValid()) {
+                // Show loading state on submit button
+                showButtonLoading(submitButton, 'Registering Business...');
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    // Hide loading state
+                    hideButtonLoading(submitButton);
+                    
+                    // Show success message
+                    const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success alert-dismissible fade show mt-3';
+                successAlert.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    Business registration submitted successfully! We'll review your application soon.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                // Insert success message
+                const form = document.getElementById('businessRegistrationForm');
+                form.parentNode.insertBefore(successAlert, form);
+                
+                // Reset form
+                form.reset();
+                document.getElementById('logoPreviewContainer').style.display = 'none';
+                
+                // Clear any validation states
+                form.querySelectorAll('.is-valid, .is-invalid').forEach(input => {
+                    input.classList.remove('is-valid', 'is-invalid');
+                });
+                
+                // Scroll to success message
+                successAlert.scrollIntoView({ behavior: 'smooth' });
+                
+                    // TODO: Send data to backend here
+                    console.log('Form data ready for submission:', formData);
+                }, 2000); // 2 second delay to show loading state
+            } else {
+                // Show validation errors
+                showValidationErrors(validator.getErrors());
+            }
+        });
+
+        // Logo Preview
+        document.getElementById('businessLogo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('logoPreview');
+            const previewContainer = document.getElementById('logoPreviewContainer');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        });
+
+        // Shopping Cart Functionality
+        const cart = {
+            items: [],
+            addItem: function(product) {
+                this.items.push(product);
+                this.updateCart();
+                this.showNotification(product.name);
+            },
+            updateCart: function() {
+                document.querySelector('.cart-count').textContent = this.items.length;
+                this.renderCartItems();
+            },
+            renderCartItems: function() {
+                const cartItemsEl = document.querySelector('.cart-items');
+                
+                if (this.items.length === 0) {
+                    cartItemsEl.innerHTML = `
+                        <div class="text-center py-4">
+                            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                            <p>Your cart is empty</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '';
+                this.items.forEach(item => {
+                    html += `
+                        <div class="cart-item">
+                            <div class="row align-items-center">
+                                <div class="col-md-2">
+                                    <img src="${item.image}" alt="${item.name}" class="img-fluid rounded">
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>${item.name}</h6>
+                                    <small class="text-muted">${item.business}</small>
+                                </div>
+                                <div class="col-md-2 text-center">
+                                    <input type="number" value="1" min="1" class="form-control form-control-sm">
+                                </div>
+                                <div class="col-md-2 text-end">
+                                    <span class="fw-bold">GHS ${item.price}</span>
+                                    <button class="btn btn-sm btn-link text-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                cartItemsEl.innerHTML = html;
+            },
+            showNotification: function(productName) {
+                const notification = document.createElement('div');
+                notification.className = 'position-fixed bottom-0 end-0 m-3 alert alert-success alert-dismissible fade show';
+                notification.style.zIndex = '1100';
+                notification.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>
+                    ${productName} added to cart
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    setTimeout(() => notification.remove(), 150);
+                }, 3000);
+            }
+        };
+
+        // Add to cart buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-to-cart')) {
+                const product = {
+                    name: e.target.dataset.name,
+                    price: e.target.dataset.price,
+                    image: e.target.dataset.image,
+                    business: e.target.dataset.business
+                };
+                cart.addItem(product);
+            }
+        });222
+
+        // Navigation between sections
+        function showSection() {
+            const sections = ['business-list', 'business-detail', 'register-business'];
+            const hash = window.location.hash.substring(1) || 'business-list';
+            
+            sections.forEach(section => {
+                document.getElementById(section).style.display = 
+                    section === hash ? 'block' : 'none';
+            });
+        }
+
+        // Initialize
+        window.addEventListener('load', showSection);
+        window.addEventListener('hashchange', showSection);
+    </script>
+</body>
+</html>
