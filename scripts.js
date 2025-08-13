@@ -340,6 +340,9 @@ async function viewBusiness(businessId) {
     const detailSection = document.getElementById('business-detail');
     
     try {
+        // Navigate to detail view early for better UX
+        window.location.hash = 'business-detail';
+        
         // Show loading overlay
         showPageLoading(detailSection, 'Loading business details...');
         
@@ -369,16 +372,42 @@ function showBusinessDetail(business) {
 
 // Update business detail content
 function updateBusinessDetailContent(business) {
-    // Update business info
-    document.querySelector('#business-detail .card-title').textContent = business.name;
-    document.querySelector('#business-detail .badge').textContent = business.category;
-    document.querySelector('#business-detail .card-text').textContent = business.description;
-    
+    // Update primary info
+    const titleEl = document.querySelector('#business-detail .card-title');
+    const badgeEl = document.querySelector('#business-detail .badge');
+    const descEl = document.querySelector('#business-detail .card-text');
+    const imgEl = document.querySelector('#business-detail .card img');
+
+    if (titleEl) titleEl.textContent = business.name || '';
+    if (badgeEl) badgeEl.textContent = business.category || '';
+    if (descEl) descEl.textContent = business.description || '';
+    if (imgEl) imgEl.src = business.logo_url || imgEl.src;
+
+    // Social/contact links
+    const waLink = document.querySelector('#business-detail a[href^="https://wa.me/"]');
+    const igLink = document.querySelector('#business-detail a[href*="instagram.com"]');
+    const callLink = document.querySelector('#business-detail a[href^="tel:"]');
+    if (waLink && business.whatsapp_link) waLink.href = `https://wa.me/${business.whatsapp_link.replace(/[^0-9]/g,'')}`;
+    if (igLink && business.instagram_handle) igLink.href = `https://instagram.com/${business.instagram_handle.replace(/^@/, '')}`;
+    if (callLink && business.contact_number) callLink.href = `tel:+${business.contact_number.replace(/[^0-9]/g,'')}`;
+
+    // Location/date
+    const locationEl = Array.from(document.querySelectorAll('#business-detail .fa-map-marker-alt'))[0]?.parentElement;
+    if (locationEl && business.location) {
+        locationEl.lastChild && (locationEl.lastChild.textContent = ` ${business.location}`);
+    }
+
+    const dateEl = Array.from(document.querySelectorAll('#business-detail .text-muted.small')).find(e => e.textContent.includes('Registered on'));
+    if (dateEl && business.created_at) {
+        const dateStr = new Date(business.created_at).toLocaleDateString();
+        dateEl.textContent = `Registered on ${dateStr}`;
+    }
+
     // Update products
     if (business.products && business.products.length > 0) {
         renderBusinessProducts(business.products);
     }
-    
+
     // Update reviews
     if (business.reviews && business.reviews.length > 0) {
         renderBusinessReviews(business.reviews);

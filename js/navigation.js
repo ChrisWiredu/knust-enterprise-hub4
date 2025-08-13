@@ -111,4 +111,29 @@ window.scrollToCategories = function(event) {
 // Make functions available globally
 window.addEventListener('DOMContentLoaded', function() {
     console.log('Navigation functions loaded!');
+
+    // Auto-close any open dropdowns on scroll/hash change to avoid covering content
+    const hideOpenDropdowns = () => {
+        const menu = document.getElementById('authDropdownMenu');
+        const toggle = document.getElementById('authNavLink');
+        if (menu && menu.classList.contains('show')) {
+            try {
+                const instance = bootstrap.Dropdown.getInstance(toggle) || new bootstrap.Dropdown(toggle);
+                instance.hide();
+            } catch (e) {
+                menu.classList.remove('show');
+            }
+        }
+    };
+
+    window.addEventListener('scroll', hideOpenDropdowns, { passive: true });
+    window.addEventListener('hashchange', hideOpenDropdowns);
+    document.addEventListener('click', (e) => {
+        // Close when clicking outside as an extra safeguard
+        const dropdown = document.querySelector('.dropdown-menu.show');
+        const toggler = document.getElementById('authNavLink');
+        if (dropdown && toggler && !toggler.contains(e.target) && !dropdown.contains(e.target)) {
+            hideOpenDropdowns();
+        }
+    });
 });
